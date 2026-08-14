@@ -2,6 +2,11 @@ const test = require("node:test");
 const assert = require("node:assert");
 const renderer = require("../../app/browser/tools/trayIconRenderer");
 
+// Captured at import time so the assertion below cannot be disturbed by a
+// later test that loads Electron itself.
+const electronLoadedOnImport =
+  require.cache[require.resolve("electron")] !== undefined;
+
 const FAKE_ICON = "data:image/png;base64,AAAA";
 
 function harness(config = {}) {
@@ -22,6 +27,19 @@ function harness(config = {}) {
   renderer.resetForTests();
   return { sent, invoked };
 }
+
+test("importing the module does not load Electron", () => {
+  // Electron's entry point resolves to the installed binary, and when that
+  // binary is absent it shells out to install.js to download ~100 MB. CI
+  // installs with `npm ci --ignore-scripts`, so a module-scope
+  // `require("electron")` would turn the lint-and-test job into a download.
+  // nativeImage is only needed once init() runs inside a real renderer.
+  assert.strictEqual(
+    electronLoadedOnImport,
+    false,
+    "require electron lazily inside init(), not at module scope",
+  );
+});
 
 test("sends a rendered icon and the count for a non-zero unread count", async () => {
   const { sent, invoked } = harness();

@@ -1,4 +1,3 @@
-const { nativeImage } = require("electron");
 const TrayIconChooser = require("./trayIconChooser");
 
 const CANVAS_SIZE = 140;
@@ -19,6 +18,12 @@ class TrayIconRenderer {
   init(config, ipcRenderer) {
     this.ipcRenderer = ipcRenderer;
     this.config = config;
+
+    // Required here rather than at module scope so the module can be loaded
+    // outside Electron. Electron's entry point resolves to the installed
+    // binary and downloads it when missing, which would make the unit tests
+    // fetch ~100 MB under CI's `npm ci --ignore-scripts`.
+    const { nativeImage } = require("electron");
 
     const iconChooser = new TrayIconChooser(config);
     this.baseIcon = nativeImage.createFromPath(iconChooser.getFile());
