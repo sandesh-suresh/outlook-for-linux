@@ -87,11 +87,13 @@ The rpm target needs `rpmbuild` (`sudo dnf install rpm-build`).
 
 ## Continuous integration
 
-Every pull request runs ESLint, the unit tests and `npm audit`, then builds the
-AppImage, deb and rpm and attaches them to the run as a downloadable artifact,
-so a change can be installed and tried before it is merged. CodeQL and
-OSV-Scanner check the code and the dependency tree; Dependabot opens weekly
-dependency PRs.
+Every pull request and every push to `main` runs ESLint, the unit tests and
+`npm audit`, then builds the AppImage, deb and rpm and attaches them to the run
+as a downloadable artifact, so a change can be installed and tried before it is
+merged. That build never publishes anything. OSV-Scanner checks
+the dependency tree and Dependabot opens weekly dependency PRs. Code scanning
+is GitHub's default CodeQL setup, configured in the repository settings rather
+than by a workflow in this repository.
 
 ## Releases
 
@@ -102,7 +104,13 @@ form — `feat:`, `fix:`, `docs:`, `chore:` — and
 `chore: release X.Y.Z` pull request open on `main` with the computed version and
 the assembled `CHANGELOG.md`. Nothing is released until that PR is merged;
 merging it bumps `package.json`, creates the `vX.Y.Z` tag and the GitHub
-release, and the build workflow attaches the packages to it.
+release, and then builds the packages from that tag and attaches them to the
+release.
+
+If a release ends up without its packages — an upload failure, say — rebuild
+them without cutting a new version by running the Release Please workflow
+manually (Actions → Release Please → Run workflow) with the tag, e.g. `v0.2.0`,
+in the `tag` field.
 
 `feat:` bumps the minor version and `fix:` the patch version. A breaking change
 (`feat!:`, or a `BREAKING CHANGE:` footer) bumps the minor version too while the

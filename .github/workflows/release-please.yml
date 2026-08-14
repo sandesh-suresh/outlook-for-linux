@@ -4,22 +4,105 @@ on:
   push:
     branches:
       - main
+  # Lets the release PR be re-attempted without pushing to main, and lets the
+  # packages for an existing tag be rebuilt and re-attached.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to build and attach packages to, e.g. v0.2.0"
+        required: false
+        default: ""
 
-permissions:
-  contents: write
-  pull-requests: write
+# Restrict default permissions — each job declares only what it needs
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
-  release-please:
+  release_please:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
 
     steps:
       # Opens (and keeps updating) a "chore: release X.Y.Z" pull request that
       # bumps the version and writes CHANGELOG.md from the conventional commits
-      # on main. Merging that PR creates the tag and the GitHub release; the
-      # build workflow then attaches the packages to it.
+      # on main. Merging that PR creates the tag and the GitHub release; the job
+      # below then builds the packages and attaches them to it.
       - name: Run release-please
+        id: release
         uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+  publish_packages:
+    needs: [release_please]
+    # Only when release-please actually cut a release, or when a tag was given
+    # by hand. Building on every push to main would attach binaries from
+    # unreleased commits to the previous release.
+    if: needs.release_please.outputs.releases_created == 'true' || inputs.tag != ''
+    runs-on: ubuntu-latest
+    permissions:
+      # Needed to upload the packages as release assets.
+      contents: write
+
+    env:
+      TAG: ${{ inputs.tag || needs.release_please.outputs.tag_name }}
+
+    steps:
+      # Build from the tag, not from main: main may already carry commits that
+      # are not part of this release.
+      - name: Check out the release tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.tag || needs.release_please.outputs.tag_name }}
+
+      - name: Install Node.js and NPM
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      # electron-builder invokes rpmbuild for the rpm target and does not
+      # bundle it. The runner image is not guaranteed to carry it.
+      - name: Install rpm tooling
+        run: |
+          if ! command -v rpmbuild > /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y rpm
+          fi
+
+      # The tag must describe the code being built, or users would download
+      # packages whose version does not match the release they came from.
+      - name: Verify the tag matches package.json
+        run: |
+          expected="v$(node -p "require('./package.json').version")"
+          if [ "$TAG" != "$expected" ]; then
+            echo "Tag $TAG does not match package.json version ($expected)." >&2
+            exit 1
+          fi
+
+      # --publish never, then upload explicitly: electron-builder's own GitHub
+      # publisher defaults to expecting a draft release and silently skips the
+      # upload when it finds a published one.
+      - name: Build packages
+        run: npm run dist:linux -- --publish never
+
+      - name: Attach packages to the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "$TAG" \
+            dist/*.AppImage dist/*.deb dist/*.rpm \
+            --clobber
