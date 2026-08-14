@@ -57,8 +57,7 @@ jobs:
     needs: [lint_and_test]
     runs-on: ubuntu-latest
     permissions:
-      # Needed by the release build to upload artifacts to the GitHub release.
-      contents: write
+      contents: read
 
     steps:
       - name: Check out Git repository
@@ -82,21 +81,14 @@ jobs:
             sudo apt-get install -y rpm
           fi
 
-      # On main, publish to the GitHub release matching the version in
-      # package.json — release-please creates that release when its release PR
-      # is merged.
-      - name: Build for release
-        if: github.ref == 'refs/heads/main'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run dist:linux -- --publish always
-
-      - name: Build for PR
-        if: github.ref != 'refs/heads/main'
+      # Never publishes. Packages reach a GitHub release only through
+      # release-please.yml, which knows the tag it just created; publishing from
+      # here would attach binaries built from unreleased commits to whichever
+      # release happens to match the version in package.json.
+      - name: Build packages
         run: npm run dist:linux -- --publish never
 
-      - name: Upload PR artifacts
-        if: github.ref != 'refs/heads/main'
+      - name: Upload build artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: outlook-for-linux-linux-x64
