@@ -1,0 +1,12 @@
+<!--
+  Source for the monochrome tray variants. Panel icons are a single colour, so
+  the glyph has to carry the shape itself: the full-colour icon's silhouette is
+  just a rounded square, which reads as a blank block once flattened.
+  Strokes are deliberately heavy so the envelope survives the 16px downscale.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+  <g fill="none" stroke="#ffffff" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="12" y="24" width="72" height="52" rx="7"/>
+    <path d="M15 31l33 25 33-25"/>
+  </g>
+</svg>
