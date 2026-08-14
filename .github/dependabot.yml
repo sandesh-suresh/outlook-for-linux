@@ -1,0 +1,27 @@
+# Dependabot configuration for automated dependency update PRs
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # npm dependencies — weekly, with minor and patch updates grouped into a
+  # single PR to keep the noise down. Electron majors arrive on their own so
+  # they can be tested before merging.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    open-pull-requests-limit: 10
+
+  # GitHub Actions — monthly. Actions are pinned to commit SHAs in the
+  # workflows, so this is the only thing that moves them forward.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5

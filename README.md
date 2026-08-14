@@ -25,8 +25,9 @@ Modelled on [teams-for-linux](https://github.com/IsmaelMartinez/teams-for-linux)
 
 ## Install
 
-Download an artifact from `dist/` after building (see
-[Building](#building)), then:
+Download a package from the
+[latest release](https://github.com/sandesh-suresh/outlook-for-linux/releases/latest),
+or build one yourself (see [Building](#building)), then:
 
 **AppImage** — no install needed:
 
@@ -83,6 +84,29 @@ npm run dist:linux  # AppImage, deb and rpm in dist/
 ```
 
 The rpm target needs `rpmbuild` (`sudo dnf install rpm-build`).
+
+## Continuous integration
+
+Every pull request runs ESLint, the unit tests and `npm audit`, then builds the
+AppImage, deb and rpm and attaches them to the run as a downloadable artifact,
+so a change can be installed and tried before it is merged. CodeQL and
+OSV-Scanner check the code and the dependency tree; Dependabot opens weekly
+dependency PRs.
+
+## Releases
+
+Versioning is driven by commit messages, so releases need no version editing by
+hand. Commit in [conventional commit](https://www.conventionalcommits.org/)
+form — `feat:`, `fix:`, `docs:`, `chore:` — and
+[release-please](https://github.com/googleapis/release-please) keeps a
+`chore: release X.Y.Z` pull request open on `main` with the computed version and
+the assembled `CHANGELOG.md`. Nothing is released until that PR is merged;
+merging it bumps `package.json`, creates the `vX.Y.Z` tag and the GitHub
+release, and the build workflow attaches the packages to it.
+
+`feat:` bumps the minor version and `fix:` the patch version. A breaking change
+(`feat!:`, or a `BREAKING CHANGE:` footer) bumps the minor version too while the
+project is pre-1.0.
 
 ## Not in this release
 
