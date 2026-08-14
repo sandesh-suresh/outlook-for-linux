@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.2](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.2.1...v0.2.2) (2026-08-14)
+
+
+### Bug Fixes
+
+* **packaging:** keep /usr/lib/.build-id links out of the rpm ([7852e8e](https://github.com/sandesh-suresh/outlook-for-linux/commit/7852e8e5e7e40a811f1aada8f4dc811702f0f088))
+* **packaging:** keep /usr/lib/.build-id links out of the rpm ([81c1b76](https://github.com/sandesh-suresh/outlook-for-linux/commit/81c1b762be1bab1acdb43d36a2ab5d4424871735))
+
 ## [0.2.1](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.2.0...v0.2.1) (2026-08-14)
 
 
