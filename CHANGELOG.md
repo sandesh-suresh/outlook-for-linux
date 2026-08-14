@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.1](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.2.0...v0.2.1) (2026-08-14)
+
+
+### Bug Fixes
+
+* **ci:** attach release packages from the release workflow ([e3f2349](https://github.com/sandesh-suresh/outlook-for-linux/commit/e3f234948276aa945f942ec46d6be2f08f7e25f3))
+
+
+### CI/CD
+
+* leave code scanning to GitHub's default CodeQL setup ([6ef36ba](https://github.com/sandesh-suresh/outlook-for-linux/commit/6ef36bab0c8b01554d42d32debb587075627dc25))
+
 ## [0.2.0](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.1.0...v0.2.0) (2026-08-14)
 
 
