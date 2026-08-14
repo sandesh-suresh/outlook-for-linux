@@ -56,6 +56,9 @@
       ]
     },
     "rpm": {
+      "fpm": [
+        "--rpm-rpmbuild-define=_build_id_links none"
+      ],
       "depends": [
         "gtk3",
         "libnotify",
