@@ -1,0 +1,71 @@
+{
+  "name": "outlook-for-linux",
+  "version": "0.1.0",
+  "main": "app/index.js",
+  "description": "Unofficial client for Microsoft Outlook for Linux",
+  "keywords": [
+    "Outlook",
+    "Microsoft Outlook"
+  ],
+  "license": "GPL-3.0-or-later",
+  "author": "sandesh-suresh <san123desh@gmail.com>",
+  "homepage": "https://github.com/sandesh-suresh/outlook-for-linux",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sandesh-suresh/outlook-for-linux.git"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test:unit": "node --test 'tests/unit/*.test.js'",
+    "start": "electron . --trace-warnings",
+    "start:dev": "electron . --trace-warnings --no-sandbox",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:linux": "electron-builder --linux"
+  },
+  "dependencies": {
+    "electron-log": "^5.4.4",
+    "yargs": "^18.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "electron": "42.8.1",
+    "electron-builder": "26.15.7",
+    "eslint": "^10.8.0",
+    "globals": "^17.9.0"
+  },
+  "build": {
+    "appId": "outlook-for-linux",
+    "linux": {
+      "category": "Office;Network;Email",
+      "packageCategory": "net",
+      "executableName": "outlook-for-linux",
+      "synopsis": "Outlook for Linux",
+      "description": "Unofficial Microsoft Outlook client for Linux using Electron. It wraps the Outlook web app as a standalone application.",
+      "icon": "build/icon.png",
+      "desktop": {
+        "entry": {
+          "Name": "Outlook for Linux",
+          "Comment": "Unofficial client for Microsoft Outlook for Linux"
+        }
+      },
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ]
+    },
+    "rpm": {
+      "depends": [
+        "gtk3",
+        "libnotify",
+        "nss",
+        "libXScrnSaver",
+        "(libXtst or libXtst6)",
+        "xdg-utils",
+        "at-spi2-core",
+        "(libuuid or libuuid1)"
+      ]
+    }
+  }
+}
