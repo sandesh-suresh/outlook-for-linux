@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.2](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.3.1...v0.3.2) (2026-08-15)
+
+
+### Bug Fixes
+
+* **deps:** pin electron to 43.2.0, 43.3+ breaks GNOME tray icon (elec… ([d523191](https://github.com/sandesh-suresh/outlook-for-linux/commit/d52319165f9f95c431db67b1bee324401a01c351))
+* **deps:** pin electron to 43.2.0, 43.3+ breaks GNOME tray icon (electron[#52674](https://github.com/sandesh-suresh/outlook-for-linux/issues/52674)) ([50751ee](https://github.com/sandesh-suresh/outlook-for-linux/commit/50751ee2b0239b6a327d88a5792987b29a8903d3))
+
 ## [0.3.1](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.3.0...v0.3.1) (2026-08-15)
 
 
