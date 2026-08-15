@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.3.0...v0.3.1) (2026-08-15)
+
+
+### Maintenance
+
+* **deps-dev:** bump electron from 42.8.1 to 43.4.0 ([b2f9ca0](https://github.com/sandesh-suresh/outlook-for-linux/commit/b2f9ca0670c4aceaf3da3328a7cff64151763c99))
+* **deps-dev:** bump electron from 42.8.1 to 43.4.0 ([a82e956](https://github.com/sandesh-suresh/outlook-for-linux/commit/a82e956ec978cfb1854795d4db46f26a72de13f5))
+
 ## [0.3.0](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.2.3...v0.3.0) (2026-08-15)
 
 
