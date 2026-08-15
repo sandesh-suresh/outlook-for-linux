@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.2.3...v0.3.0) (2026-08-15)
+
+
+### Features
+
+* **tray:** add unread-count menu item and fix unread detection ([775d24d](https://github.com/sandesh-suresh/outlook-for-linux/commit/775d24d48972fca49aba085fac62931a1a9f94f3))
+* **tray:** add unread-count menu item and fix unread detection ([d59fe19](https://github.com/sandesh-suresh/outlook-for-linux/commit/d59fe19d159072c8497983c1b65a303beb01f7ce))
+
 ## [0.2.3](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.2.2...v0.2.3) (2026-08-15)
 
 
