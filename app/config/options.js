@@ -49,10 +49,10 @@ module.exports = {
     type: "string",
     choices: ["low", "normal", "critical"],
   },
-  useMutationTitleLogic: {
+  useUnreadListLogic: {
     default: true,
     describe:
-      "Watch the page title with a MutationObserver to derive the unread count for the tray badge",
+      "Watch the mail list with a MutationObserver to derive the unread count for the tray badge",
     type: "boolean",
   },
   disableBadgeCount: {

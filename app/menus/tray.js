@@ -12,6 +12,7 @@ class ApplicationTray {
   #Menu;
   #nativeImage;
   #tray = null;
+  #unreadCount = 0;
 
   /**
    * @param {object} window - The main BrowserWindow.
@@ -58,11 +59,30 @@ class ApplicationTray {
 
   #buildMenu() {
     return [
+      { label: this.#unreadLabel(), click: () => this.#toggleWindow() },
+      { type: "separator" },
       { label: "Show / Hide", click: () => this.#toggleWindow() },
       { label: "Reload", click: () => this.#window.reload?.() },
       { type: "separator" },
       { label: "Quit", click: () => this.#window.emit?.("tray-quit") },
     ];
+  }
+
+  #unreadLabel() {
+    if (this.#unreadCount <= 0) {
+      return "No unread emails";
+    }
+    if (this.#unreadCount === 1) {
+      return "1 unread email";
+    }
+    return `${this.#unreadCount} unread emails`;
+  }
+
+  #refreshMenu() {
+    if (!this.#tray) {
+      return;
+    }
+    this.#tray.setContextMenu(this.#Menu.buildFromTemplate(this.#buildMenu()));
   }
 
   #toggleWindow() {
@@ -98,6 +118,9 @@ class ApplicationTray {
           : this.#config.appTitle,
       );
       this.#window.flashFrame(Boolean(flash));
+
+      this.#unreadCount = count;
+      this.#refreshMenu();
     } catch (error) {
       console.error("[TRAY] Failed to update tray image:", error.message);
     }

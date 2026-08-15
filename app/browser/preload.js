@@ -1,6 +1,6 @@
 const { ipcRenderer } = require("electron");
 const { installNotificationShim } = require("./tools/notificationShim");
-const mutationTitle = require("./tools/mutationTitle");
+const unreadListObserver = require("./tools/unreadListObserver");
 const toastObserver = require("./tools/toastObserver");
 const trayIconRenderer = require("./tools/trayIconRenderer");
 
@@ -30,7 +30,7 @@ globalThis.addEventListener("DOMContentLoaded", async () => {
 
     // Both are config-gated and DOM-dependent, so they wait for the config
     // round-trip; the notification shim above deliberately does not.
-    mutationTitle.init(config);
+    unreadListObserver.init(config);
     // Always-on: forwards Outlook's in-app "Alert" style toast to a native
     // notification, the same way the shim above handles the standards-based
     // Push API path.
