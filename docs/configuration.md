@@ -33,7 +33,7 @@ The same options work as flags: `outlook-for-linux --closeToTray=false`.
 | `closeToTray` | boolean | `true` | Hide to tray instead of quitting when the window is closed. Ignored when `trayIconEnabled` is `false`, since hiding with no tray would leave no way back to the window. |
 | `disableNotifications` | boolean | `false` | Disable all native notifications. |
 | `defaultNotificationUrgency` | string | `normal` | Urgency passed to the native notification server. One of `low`, `normal`, `critical`. |
-| `useMutationTitleLogic` | boolean | `true` | Watch the page title with a MutationObserver to derive the unread count for the tray badge. |
+| `useUnreadListLogic` | boolean | `true` | Watch the mail list with a MutationObserver to derive the unread count for the tray badge. |
 | `disableBadgeCount` | boolean | `false` | Do not draw the unread count badge on the tray icon. Also suppresses the taskbar/dock badge. |
 | `disableNotificationWindowFlash` | boolean | `false` | Do not flash the window frame when the unread count increases. |
 | `disableGpu` | boolean | `false` | Disable GPU hardware acceleration. Try this first if the window renders blank or the app crashes on startup. |

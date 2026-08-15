@@ -111,6 +111,78 @@ test("does not create a tray when the tray icon is disabled", () => {
   assert.strictEqual(ipcMain.handlers["tray-update"], undefined);
 });
 
+test("the context menu starts with an unread-count item reading 'No unread emails'", () => {
+  const { created, deps } = fakeDeps();
+  const tray = new ApplicationTray(
+    fakeWindow(),
+    CONFIG,
+    "/icons/base.png",
+    deps,
+  );
+  tray.initialize(fakeIpcMain());
+
+  assert.strictEqual(created[0].menu.template[0].label, "No unread emails");
+});
+
+test("a tray-update with a count of one updates the unread-count item to the singular form", () => {
+  const { created, deps } = fakeDeps();
+  const tray = new ApplicationTray(
+    fakeWindow(),
+    CONFIG,
+    "/icons/base.png",
+    deps,
+  );
+  tray.initialize(fakeIpcMain());
+
+  tray.updateTrayImage({ icon: null, flash: false, count: 1 });
+
+  assert.strictEqual(created[0].menu.template[0].label, "1 unread email");
+});
+
+test("a tray-update with a count above one updates the unread-count item to the plural form", () => {
+  const { created, deps } = fakeDeps();
+  const tray = new ApplicationTray(
+    fakeWindow(),
+    CONFIG,
+    "/icons/base.png",
+    deps,
+  );
+  tray.initialize(fakeIpcMain());
+
+  tray.updateTrayImage({ icon: null, flash: false, count: 4 });
+
+  assert.strictEqual(created[0].menu.template[0].label, "4 unread emails");
+});
+
+test("a tray-update back to zero resets the unread-count item", () => {
+  const { created, deps } = fakeDeps();
+  const tray = new ApplicationTray(
+    fakeWindow(),
+    CONFIG,
+    "/icons/base.png",
+    deps,
+  );
+  tray.initialize(fakeIpcMain());
+
+  tray.updateTrayImage({ icon: null, flash: false, count: 4 });
+  tray.updateTrayImage({ icon: null, flash: false, count: 0 });
+
+  assert.strictEqual(created[0].menu.template[0].label, "No unread emails");
+});
+
+test("clicking the unread-count item shows and focuses a hidden window", () => {
+  const { created, deps } = fakeDeps();
+  const window = fakeWindow();
+  window.visible = false;
+  const tray = new ApplicationTray(window, CONFIG, "/icons/base.png", deps);
+  tray.initialize(fakeIpcMain());
+
+  created[0].menu.template[0].click();
+
+  assert.strictEqual(window.visible, true);
+  assert.strictEqual(window.focused, true);
+});
+
 test("a tray-update with a count swaps the image and flashes the window", () => {
   const { created, deps } = fakeDeps();
   const window = fakeWindow();

@@ -19,7 +19,7 @@ test("the Outlook URL defaults to the work/school endpoint", () => {
 test("tray and notifications are on by default", () => {
   assert.strictEqual(options.trayIconEnabled.default, true);
   assert.strictEqual(options.disableNotifications.default, false);
-  assert.strictEqual(options.useMutationTitleLogic.default, true);
+  assert.strictEqual(options.useUnreadListLogic.default, true);
 });
 
 test("appIconType is constrained to the shipped icon variants", () => {
