@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.3](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.2.2...v0.2.3) (2026-08-15)
+
+
+### Bug Fixes
+
+* **notifications:** forward Outlook's in-app toast to native notifica… ([700d5d9](https://github.com/sandesh-suresh/outlook-for-linux/commit/700d5d943f7572464ec180c06a59f2f4b5c4ebd6))
+* **notifications:** forward Outlook's in-app toast to native notifications ([5d91ee2](https://github.com/sandesh-suresh/outlook-for-linux/commit/5d91ee2bbf19049c701a4266bccae452572f3cde))
+
 ## [0.2.2](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.2.1...v0.2.2) (2026-08-14)
 
 
