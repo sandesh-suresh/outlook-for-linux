@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.3](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.3.2...v0.3.3) (2026-08-29)
+
+
+### Bug Fixes
+
+* **window:** show Outlook's own context menu instead of a fallback ([d821db1](https://github.com/sandesh-suresh/outlook-for-linux/commit/d821db13b65f9565486d1e90d8af0f71c49cc99b))
+* **window:** show Outlook's own context menu instead of a fallback ([86a8514](https://github.com/sandesh-suresh/outlook-for-linux/commit/86a8514f7083717a812c1b7941ad76a4a9433d75))
+
 ## [0.3.2](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.3.1...v0.3.2) (2026-08-15)
 
 
