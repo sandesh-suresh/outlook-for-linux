@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.4](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.3.3...v0.3.4) (2026-08-29)
+
+
+### Bug Fixes
+
+* **window:** disable DevTools/debugger access in production ([3bf1625](https://github.com/sandesh-suresh/outlook-for-linux/commit/3bf1625294f4535971f1f3b2c1e227ae360b223b))
+* **window:** disable DevTools/debugger access in production ([2183fcb](https://github.com/sandesh-suresh/outlook-for-linux/commit/2183fcb3e00022471966bcd986166358d32b37cc))
+
 ## [0.3.3](https://github.com/sandesh-suresh/outlook-for-linux/compare/v0.3.2...v0.3.3) (2026-08-29)
 
 
