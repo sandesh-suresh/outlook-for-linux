@@ -39,6 +39,10 @@ function fakeDeps() {
         openDevTools() {
           this.devToolsOpen = true;
         },
+        closeDevTools() {
+          this.devToolsOpen = false;
+          this.closeDevToolsCalls = (this.closeDevToolsCalls || 0) + 1;
+        },
         getUserAgent() {
           return this.userAgent;
         },
@@ -99,6 +103,54 @@ test("strips the app-name and Electron tokens from the UA so Outlook treats this
     created[0].webContents.userAgent,
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
   );
+});
+
+test("blocks the DevTools keyboard shortcut when web debugging is off", () => {
+  const { created, deps } = fakeDeps();
+  createWindow(CONFIG, deps);
+  const handler = created[0].webContents.handlers["before-input-event"];
+
+  const f12Event = { prevented: false, preventDefault() { this.prevented = true; } };
+  handler(f12Event, { key: "F12", control: false, meta: false, shift: false });
+  assert.strictEqual(f12Event.prevented, true);
+
+  const ctrlShiftIEvent = { prevented: false, preventDefault() { this.prevented = true; } };
+  handler(ctrlShiftIEvent, { key: "i", control: true, meta: false, shift: true });
+  assert.strictEqual(ctrlShiftIEvent.prevented, true);
+
+  const plainIEvent = { prevented: false, preventDefault() { this.prevented = true; } };
+  handler(plainIEvent, { key: "i", control: false, meta: false, shift: false });
+  assert.strictEqual(plainIEvent.prevented, false);
+});
+
+test("closes DevTools immediately if it opens by any other means, when web debugging is off", () => {
+  const { created, deps } = fakeDeps();
+  createWindow(CONFIG, deps);
+  const handler = created[0].webContents.handlers["devtools-opened"];
+
+  handler();
+
+  assert.strictEqual(created[0].webContents.closeDevToolsCalls, 1);
+});
+
+test("leaves DevTools reachable when web debugging is on", () => {
+  const { created, deps } = fakeDeps();
+  createWindow({ ...CONFIG, webDebug: true }, deps);
+
+  assert.strictEqual(created[0].webContents.handlers["before-input-event"], undefined);
+  assert.strictEqual(created[0].webContents.handlers["devtools-opened"], undefined);
+});
+
+test("a popped-out window also has DevTools blocked when web debugging is off", () => {
+  const { created, deps } = fakeDeps();
+  createWindow(CONFIG, deps);
+  const didCreateWindow = created[0].webContents.handlers["did-create-window"];
+
+  const child = new deps.BrowserWindow({});
+  didCreateWindow(child, { url: "https://outlook.office.com/mail/deeplink" });
+
+  assert.strictEqual(typeof child.webContents.handlers["before-input-event"], "function");
+  assert.strictEqual(typeof child.webContents.handlers["devtools-opened"], "function");
 });
 
 test("respects a custom URL from config", () => {

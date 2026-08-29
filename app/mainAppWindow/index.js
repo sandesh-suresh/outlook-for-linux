@@ -116,6 +116,31 @@ function attachContextMenu(webContents, Menu, window) {
 }
 
 /**
+ * Blocks every in-app path to Chromium's DevTools (and the debugger/Sources
+ * panel inside it): the default menu's Ctrl+Shift+I/F12 accelerator — which
+ * fires regardless of autoHideMenuBar, since that only hides the bar, not
+ * its accelerators — and, as a backstop for any other trigger (a future
+ * menu item, a remote-debugging attach), closes DevTools immediately if it
+ * ever does open.
+ *
+ * @param {object} webContents - The webContents to lock down.
+ */
+function disableDevTools(webContents) {
+  webContents.on("before-input-event", (event, input) => {
+    const key = input.key.toUpperCase();
+    const isToggleDevToolsShortcut =
+      key === "F12" || ((input.control || input.meta) && input.shift && key === "I");
+    if (isToggleDevToolsShortcut) {
+      event.preventDefault();
+    }
+  });
+
+  webContents.on("devtools-opened", () => {
+    webContents.closeDevTools();
+  });
+}
+
+/**
  * @param {object} config - The resolved startup config.
  * @param {object} [deps] - Electron collaborators, injectable for tests.
  * @returns {object} The created window.
@@ -170,9 +195,15 @@ function createWindow(config, deps = {}) {
   });
 
   attachContextMenu(window.webContents, Menu, window);
+  if (!config.webDebug) {
+    disableDevTools(window.webContents);
+  }
 
   window.webContents.on("did-create-window", (childWindow) => {
     attachContextMenu(childWindow.webContents, Menu, childWindow);
+    if (!config.webDebug) {
+      disableDevTools(childWindow.webContents);
+    }
   });
 
   window.webContents.setWindowOpenHandler(({ url }) => {
