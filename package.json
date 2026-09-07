@@ -30,9 +30,9 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "electron": "^43.2.0",
-    "electron-builder": "26.15.7",
-    "eslint": "^10.8.0",
-    "globals": "^17.9.0"
+    "electron-builder": "26.16.0",
+    "eslint": "^10.10.0",
+    "globals": "^17.12.0"
   },
   "build": {
     "appId": "outlook-for-linux",
